@@ -113,19 +113,12 @@ public class CartService {
     public boolean decreaseQuantity(long productId) {
         CartItem cartItem = findById(productId);
         if (cartItem != null) {
-            if (cartItem.getQuantity() > 1) {
-                cartItem.decreaseQuantity();
-                LOG.debug("Quantity of '{}' decreased to: '{}'", cartItem.getShortName(), cartItem.getQuantity());
-            } else {
-                cartItem.decreaseQuantity();
-                LOG.debug("Product '{}' removed from cart as quantity reached 0", cartItem.getShortName());
-            }
+            cartItem.decreaseQuantity();
+            LOG.debug("Quantity of '{}' decreased to: '{}'", cartItem.getShortName(), cartItem.getQuantity());
             return true;
         } else {
             LOG.warn("Product with ID '{}' not found in cart", productId);
             return false;
         }
     }
-
 }
-

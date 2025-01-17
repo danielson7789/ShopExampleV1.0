@@ -79,11 +79,21 @@ class CartServiceTest {
     @Test
     void decreaseQuantity_171() {
         cartService.addProduct(171);
-        cartService.increaseQuantity(171);
-        cartService.increaseQuantity(171);
-        boolean result = cartService.decreaseQuantity(171);
+        cartService.addProduct(171);
+        cartService.addProduct(171);
+        cartService.addProduct(171);
+        // decrease by 1
+        cartService.decreaseQuantity(171);
         CartItem cartItem = cartService.findById(171);
-        assertTrue(result);
-        assertEquals(2, cartItem.getQuantity());
+        assertEquals(3, cartItem.getQuantity());
+    }
+
+    @Test
+    void decreaseQuantity_non_existant(){
+        cartService.addProduct(Integer.MAX_VALUE);
+        cartService.decreaseQuantity(Integer.MAX_VALUE);
+        cartService.decreaseQuantity(Integer.MAX_VALUE);
+        CartItem cartItem = cartService.findById(Integer.MAX_VALUE);
+        assertEquals(null,cartItem);
     }
 }

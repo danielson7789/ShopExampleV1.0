@@ -36,11 +36,22 @@ public class CartController {
         return "redirect:/index.html";
     }
 
-    @GetMapping
+    @GetMapping({"/increase/{productId}"})
     public String increaseQuantity(@PathVariable(name="productId") Integer productId){
         boolean isSuccessful = cartService.increaseQuantity(productId);
         if(isSuccessful){
             LOG.info("Quantity of cartItem with Id '{}' increased" ,productId);
+        }else{
+            LOG.warn("Product with ID '{}' could not be found", productId);
+        }
+        return "redirect:/cart.html";
+    }
+
+    @GetMapping({"/decrease/{productId}"})
+    public String decreaseQuantity(@PathVariable(name="productId") Integer productId){
+        boolean isSuccessful = cartService.decreaseQuantity(productId);
+        if(isSuccessful){
+            LOG.info("Quantity of cartItem with Id '{}' decreased" ,productId);
         }else{
             LOG.warn("Product with ID '{}' could not be found", productId);
         }

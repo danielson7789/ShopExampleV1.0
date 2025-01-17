@@ -48,7 +48,7 @@
                           <a href="#" class="text-decoration-none">{{{shortName}}}</a>
                         </h5>
                         <div class="card-price">
-                          <span class="money" >{{discountPrice}}&euro;</span>
+                          <span class="money" >{{actualPrice}}&euro;</span>
                         </div>
                       </div>
                     </div>
@@ -60,17 +60,15 @@
                       <div class="input-group product-qty">
                         <!-- quantity Buttons-->
                         <span class="input-group-btn">
-                            <button type="button" class="quantity-left-minus"  data-type="minus" data-field="">
+                            <a href="cart/decrease/{{id}}" type="button" class="">
                               <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
-                            </button>
+                            </a>
                         </span>
                         <input type="text" id="quantity" name="quantity" class="form-control input-number text-center"
                                value="{{quantity}}" min="1" max="100">
                         <span class="input-group-btn">
-                          <a href="/cart/increase/{{id}}">
-                            <button type="button" class="quantity-right-plus" data-type="plus" data-field="">
+                            <a href="cart/increase/{{id}}" type="button" class="" >
                                 <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
-                            </button>
                             </a>
                         </span>
                       </div>
