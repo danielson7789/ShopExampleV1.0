@@ -34,14 +34,16 @@ public class ShopController {
     }
 
     @GetMapping(value= {"/shop.html"})
-    public String shop(Model model) {
+    public String shop(Model viewModel) {
         List<Product> products = productService.getProducts();
-        model.addAttribute("products", products.subList(0, 15));
+        loadCartItems(viewModel);
+        viewModel.addAttribute("products", products.subList(0, 15));
         return "shop";
     }
 
     @GetMapping(value = {"/{name}.html"})
-    public String htmlMapping(@PathVariable String name) {
+    public String htmlMapping(@PathVariable String name, Model viewModel) {
+        loadCartItems(viewModel);
         return name;
     }
 

@@ -29,6 +29,7 @@ class ProductServiceTest {
         assertTrue(xiaomi11.getName().startsWith("Xiaomi 11 Lite"));
     }
 
+    @Test
     void getProductById_boundary(){
         int size = productService.getProducts().size();
         Product maxProduct = productService.getProducts().get(size-1);
@@ -36,6 +37,7 @@ class ProductServiceTest {
         assertTrue(maxProduct.getName().startsWith("Xifo LYF Earth"));
     }
 
+    @Test
     void getProductById_non_existant(){
         Product nonExistant = productService.getProductById(99999);
         assertEquals(null, nonExistant);

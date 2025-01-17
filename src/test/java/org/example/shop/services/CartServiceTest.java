@@ -34,6 +34,7 @@ class CartServiceTest {
         CartItem cartItem = cartService.findById(171);
         assertNotNull(cartItem);
         assertEquals(285.99,cartItem.getDiscountPrice());
+        assertTrue(cartItem.getShortName().startsWith("Xiaomi 11 Lite NE 5G"));
 
     }
 
@@ -46,8 +47,43 @@ class CartServiceTest {
 
     @Test
     void addProduct_non_existant(){
-        cartService.addProduct(9999);
-        CartItem cartItem = cartService.findById(9999);
+        cartService.addProduct(Integer.MAX_VALUE);
+        CartItem cartItem = cartService.findById(Integer.MAX_VALUE);
         assertEquals(null,cartItem);
+    }
+
+    @Test
+    void findById_empty_cart(){
+        CartItem cartItem = cartService.findById(171);
+        assertEquals(null,cartItem);
+    }
+
+    @Test
+    void increaseQuantity_171(){
+        cartService.addProduct(171);
+        cartService.increaseQuantity(171);
+        cartService.increaseQuantity(171);
+        CartItem cartItem = cartService.findById(171);
+        assertEquals(3,cartItem.getQuantity());
+    }
+
+    @Test
+    void increaseQuantity_non_existant(){
+        cartService.addProduct(Integer.MAX_VALUE);
+        cartService.increaseQuantity(Integer.MAX_VALUE);
+        cartService.increaseQuantity(Integer.MAX_VALUE);
+        CartItem cartItem = cartService.findById(Integer.MAX_VALUE);
+        assertEquals(null,cartItem);
+    }
+
+    @Test
+    void decreaseQuantity_171() {
+        cartService.addProduct(171);
+        cartService.increaseQuantity(171);
+        cartService.increaseQuantity(171);
+        boolean result = cartService.decreaseQuantity(171);
+        CartItem cartItem = cartService.findById(171);
+        assertTrue(result);
+        assertEquals(2, cartItem.getQuantity());
     }
 }

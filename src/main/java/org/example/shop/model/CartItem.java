@@ -37,7 +37,7 @@ public class CartItem extends Product {
     }
 
     public double getTotalPrice() {
-        return quantity * actualPrice;
+        return Math.floor(quantity * actualPrice * 100) /100;
     }
 
     // TODO : convert Product into cartItem

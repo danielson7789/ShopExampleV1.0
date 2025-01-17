@@ -35,4 +35,15 @@ public class CartController {
         }
         return "redirect:/index.html";
     }
+
+    @GetMapping
+    public String increaseQuantity(@PathVariable(name="productId") Integer productId){
+        boolean isSuccessful = cartService.increaseQuantity(productId);
+        if(isSuccessful){
+            LOG.info("Quantity of cartItem with Id '{}' increased" ,productId);
+        }else{
+            LOG.warn("Product with ID '{}' could not be found", productId);
+        }
+        return "redirect:/cart.html";
+    }
 }

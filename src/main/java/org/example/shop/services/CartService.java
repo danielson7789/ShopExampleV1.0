@@ -11,9 +11,9 @@ import org.apache.logging.log4j.Logger;
 
 
 /** delivers necassary Services concerning the cart its items
-*@author Daniel Klenn
-* @version 1.4
-* @since 1.4
+ *@author Daniel Klenn
+ * @version 1.4
+ * @since 1.4
  */
 @Service
 public class CartService {
@@ -93,16 +93,39 @@ public class CartService {
         return null;
     }
 
-
-    public void increaseQuantity(long productId) {
-        //TODO : search for the productId in the cart
-        // TODO: if successful , increase the quantity
-
+    /**
+     * Finds an item in the cart and increase its quantity by 1
+     * @param productId the cartItem´s Id
+     * @return if successful <code>true</code> otherwise <code>false</code>
+     */
+    public boolean increaseQuantity(long productId) {
+        CartItem cartItem = findById(productId);
+        if (cartItem != null) {
+            cartItem.increaseQuantity();
+            LOG.debug("Quantity of '{}' increased to: '{}'", cartItem.getShortName(), cartItem.getQuantity());
+            return true;
+        } else {
+            LOG.warn("Product with ID '{}' not found in cart", productId);
+            return false;
+        }
     }
 
-    public void decreaseQuantity(long productId) {
-        //TODO : search for the productId in the cart
-        // TODO: if successful , decrease the quantity
+    public boolean decreaseQuantity(long productId) {
+        CartItem cartItem = findById(productId);
+        if (cartItem != null) {
+            if (cartItem.getQuantity() > 1) {
+                cartItem.decreaseQuantity();
+                LOG.debug("Quantity of '{}' decreased to: '{}'", cartItem.getShortName(), cartItem.getQuantity());
+            } else {
+                cartItem.decreaseQuantity();
+                LOG.debug("Product '{}' removed from cart as quantity reached 0", cartItem.getShortName());
+            }
+            return true;
+        } else {
+            LOG.warn("Product with ID '{}' not found in cart", productId);
+            return false;
+        }
     }
 
 }
+

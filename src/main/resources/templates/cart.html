@@ -26,84 +26,29 @@
         <div class="col-md-7">
           <div class="cart-table">
             <div class="cart-header">
-              <div class="row d-flex">
-                <h6 class="cart-title text-uppercase text-muted col-lg-4 pb-3">Product</h6>
-                <h6 class="cart-title text-uppercase text-muted col-lg-3 pb-3">Quantity</h6>
-                <h6 class="cart-title text-uppercase text-muted col-lg-4 pb-3">Subtotal</h6>
+              <div class="row align-items-center text-uppercase">
+                <h6 class="cart-title  text-muted col-lg-5 pb-3">Product</h6>
+                <h6 class="cart-title  text-muted col-lg-3 pb-3">Quantity</h6>
+                <h6 class="cart-title  text-muted col-lg-1 pb-3">Subtotal</h6>
               </div>
             </div>
-            <div class="cart-item border-top border-bottom">
-              <div class="row align-items-center"> 
-                <div class="col-lg-4 col-md-3">
-                  <div class="cart-info d-flex flex-wrap align-items-center mb-4">
-                    <div class="col-lg-5">
-                      <div class="card-image">
-                        <img src="images/product-thumb-1.jpg" alt="cloth" class="img-fluid">
-                      </div>
-                    </div>
-                    <div class="col-lg-7">
-                      <div class="card-detail ps-3">
-                        <h5 class="card-title">
-                          <a href="#" class="text-decoration-none">Iphone 13</a>
-                        </h5>
-                        <div class="card-price">
-                          <span class="money text-dark" data-currency-usd="$1200.00">$1500.00</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 col-md-7">
-                  <div class="row d-flex">
-                    <div class="col-md-4">
-                      <div class="input-group product-qty">
-                        <span class="input-group-btn">
-                            <button type="button" class="quantity-left-minus btn btn-light btn-number"  data-type="minus" data-field="">
-                              <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
-                            </button>
-                        </span>
-                        <input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100">
-                        <span class="input-group-btn">
-                            <button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus" data-field="">
-                                <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
-                            </button>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="col-md-8 text-center">
-                      <div class="total-price">
-                        <span class="money text-dark">$1500.00</span>
-                      </div>
-                    </div>   
-                  </div>             
-                </div>
-                <div class="col-lg-1 col-md-2">
-                  <div class="cart-remove">
-                    <a href="#">
-                      <svg width="32px">
-                        <use xlink:href="#trash"></use>
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {{#cartItems}}
             <div class="cart-item border-top border-bottom">
               <div class="row align-items-center">
-                <div class="col-lg-4 col-md-3">
+                <div class="col-lg-5 col-md-3">
                   <div class="cart-info d-flex flex-wrap align-items-center">
-                    <div class="col-lg-5">
+                    <div class="col-lg-3">
                       <div class="card-image">
-                        <img src="images/product-thumb-2.jpg" alt="product" class="img-fluid">
+                        <img src="{{image}}" alt="{{{shortName}}}" class="img-fluid">
                       </div>
                     </div>
-                    <div class="col-lg-7">
+                    <div class="col-lg-9">
                       <div class="card-detail ps-3">
                         <h5 class="card-title">
-                          <a href="#" class="text-decoration-none">Pink watch</a>
+                          <a href="#" class="text-decoration-none">{{{shortName}}}</a>
                         </h5>
                         <div class="card-price">
-                          <span class="money text-dark" data-currency-usd="$1200.00">$870.00</span>
+                          <span class="money" >{{discountPrice}}&euro;</span>
                         </div>
                       </div>
                     </div>
@@ -113,26 +58,31 @@
                   <div class="row d-flex">
                     <div class="col-lg-4">
                       <div class="input-group product-qty">
+                        <!-- quantity Buttons-->
                         <span class="input-group-btn">
-                            <button type="button" class="quantity-left-minus btn btn-light btn-number"  data-type="minus" data-field="">
+                            <button type="button" class="quantity-left-minus"  data-type="minus" data-field="">
                               <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
                             </button>
                         </span>
-                        <input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100">
+                        <input type="text" id="quantity" name="quantity" class="form-control input-number text-center"
+                               value="{{quantity}}" min="1" max="100">
                         <span class="input-group-btn">
-                            <button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus" data-field="">
+                          <a href="/cart/increase/{{id}}">
+                            <button type="button" class="quantity-right-plus" data-type="plus" data-field="">
                                 <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
                             </button>
+                            </a>
                         </span>
                       </div>
                     </div>
                     <div class="col-lg-8 text-center">
                       <div class="total-price">
-                        <span class="money text-dark">$870.00</span>
+                        <span class="money text">{{totalPrice}}&euro;</span>
                       </div>
                     </div>   
                   </div>             
                 </div>
+                <!-- trash icon -->
                 <div class="col-lg-1 col-md-2">
                   <div class="cart-remove">
                     <a href="#">
@@ -144,6 +94,7 @@
                 </div>
               </div>
             </div>
+            {{/cartItems}}
           </div>
         </div>
         <div class="col-md-5">
@@ -157,7 +108,7 @@
                     <td data-title="Subtotal">
                       <span class="price-amount amount ps-5">
                         <bdi>
-                          <span class="price-currency-symbol">$</span>2,370.00
+                          <span class="price-currency-symbol">&euro;</span>{{grandTotal}}
                         </bdi>
                       </span>
                     </td>
@@ -167,7 +118,7 @@
                     <td data-title="Total">
                       <span class="price-amount amount ps-5">
                         <bdi>
-                          <span class="price-currency-symbol">$</span>2,370.00</bdi>
+                          <span class="price-currency-symbol">&euro;</span>{{grandTotal}}</bdi>
                       </span>
                     </td>
                   </tr>
