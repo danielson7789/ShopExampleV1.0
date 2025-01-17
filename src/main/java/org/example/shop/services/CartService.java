@@ -77,6 +77,17 @@ public class CartService {
         return cartItem.toString();
     }
 
+    public String removeProduct(long productId) {
+        CartItem cartItem = findById(productId);
+        if(cartItem != null) {
+            cart.getItems().remove(cartItem);
+            LOG.debug("Item {} removed from cart", cartItem.getShortName());
+            return cartItem.toString();
+        }
+        LOG.warn("Product with ID '{}' not found in cart", productId);
+        return null;
+    }
+
 
     /**
      * Finds a {@link CartItem} by its productId within the same shopping cart
