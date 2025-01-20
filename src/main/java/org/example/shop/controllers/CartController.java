@@ -1,5 +1,6 @@
 package org.example.shop.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.example.shop.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class CartController {
 
     @GetMapping(value = "/add/{productId}")
     public String addToCart(
-            @PathVariable(name = "productId") Integer productId, RedirectAttributes atts) {
+            @PathVariable(name = "productId") Integer productId, RedirectAttributes atts , HttpServletRequest request) {
         String productName = cartService.addProduct(productId);
         if (productName != null) {
             String message = String.format("'%s' added to the cart", productName);
@@ -33,7 +34,8 @@ public class CartController {
             atts.addFlashAttribute(MESSAGE, message);
             LOG.warn(message);
         }
-        return "redirect:/index.html";
+        String referrer = request.getHeader("referer");
+        return "redirect:" + referrer;
     }
 
     @GetMapping({"/increase/{productId}"})

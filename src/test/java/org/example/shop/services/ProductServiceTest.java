@@ -42,4 +42,30 @@ class ProductServiceTest {
         Product nonExistant = productService.getProductById(99999);
         assertEquals(null, nonExistant);
     }
+
+    @Test
+    void readPrdoucts_wrong_filename(){
+
+    }
+
+    @Test
+    void getProductRange_0_to_PAGE_SIZE(){
+
+    }
+
+    @Test
+    void getProductRange_16_to_PAGE_SIZE_x_2(){
+
+    }
+
+    @Test
+    void getProductRange_negative_from(){
+
+    }
+
+    @Test
+    void getProductRange_to_greater_then_size(){
+
+    }
+
 }

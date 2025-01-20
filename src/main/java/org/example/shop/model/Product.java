@@ -91,4 +91,13 @@ public class Product {
         int end = name.indexOf(' ', SHORTNAME_LENGTH);
         return name.substring(0, end) + "...";
     }
+
+    public String[] getRatingStars(){
+        String[] stars = new String[5];
+        for (int i = 1; i <= 5; i++) {
+            String starType = (rating <= i) ? "outline" : "solid" ;
+            stars[i-1] = starType;
+        }
+        return stars;
+    }
 }

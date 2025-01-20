@@ -15,6 +15,7 @@ public class ProductService {
     // TODO: move to application.properties
     private static final String DATA_SOURCE = "src/main/resources/data/electronics.csv";
     private List<Product> products;
+    public static final int PAGE_SIZE = 15;
 
 
     public ProductService() {
@@ -83,4 +84,13 @@ public class ProductService {
         return products.get((int) id);
         }
     }
+    /**
+     *
+    public List<Product> getProductRange(int from, int to) {
+    // TODO : avoid from <0
+        // TODO : avoid to > size -1
+        // TODO : deliver sublist(from,to)
+    return null;
+    }
 
+    */
