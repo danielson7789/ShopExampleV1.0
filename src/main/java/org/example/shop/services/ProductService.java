@@ -2,6 +2,8 @@ package org.example.shop.services;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.shop.model.Product;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ public class ProductService {
     private static final String DATA_SOURCE = "src/main/resources/data/electronics.csv";
     private List<Product> products;
     public static final int PAGE_SIZE = 15;
+    private final static Logger LOG = LogManager.getLogger(ProductService.class);
 
 
     public ProductService() {
@@ -80,17 +83,20 @@ public class ProductService {
      */
 
     public Product getProductById(long id) {
-        if(id > products.size() - 1) return null;
+        if (id > products.size() - 1) return null;
         return products.get((int) id);
-        }
-    }
-    /**
-     *
-    public List<Product> getProductRange(int from, int to) {
-    // TODO : avoid from <0
-        // TODO : avoid to > size -1
-        // TODO : deliver sublist(from,to)
-    return null;
     }
 
-    */
+    public List<Product> getProductsRange(int from, int to) {
+        if (from >= 0 && to >= 0) {
+            if  (to < products.size()) {
+                return products.subList(from, to);
+            } else if (to < products.size() + PAGE_SIZE + 1) {
+                return products.subList(from, products.size());
+            }
+        }
+        return null;
+    }
+
+
+}

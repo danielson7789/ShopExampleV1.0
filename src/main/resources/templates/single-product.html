@@ -2,23 +2,11 @@
 <html lang="en">
 
 <head>
+    <title>Onlineshop</title>
     {{>partials/htmlHead}}
 </head>
 <body data-bs-theme="dark">
 {{>partials/header}}
-<section class="mt-5 pt-5">
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="text-uppercase fs-3">Shop</h1>
-            <nav class="breadcrumb">
-                <a class="breadcrumb-item" href="/index.html">Home</a>
-                <a class="breadcrumb-item" href="#">Pages</a>
-                <span class="breadcrumb-item active" aria-current="page">Shop</span>
-            </nav>
-        </div>
-    </div>
-</section>
-{{#product}}
 <section id="product-detail" class="single-product">
     <div class="container">
         <div class="row g-5">
@@ -27,39 +15,39 @@
                     <div class="col-md-12">
                         <div class="product-large-slider">
                             <div class="image-zoom">
-                                <img src="{{image}}" alt="{{{shortName}}}" width="99%">
+                                <img src="{{product.image}}" alt="{{{product.shortName}}}" width="99%">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="col-md-5">
-        <div class="product-info">
-            <div class="element-header">
-                <h2 itemprop="name" class="display-4">{{{shortName}}}</h2>
-                <div class="rating-container d-flex align-items-center">
-                    {{#ratingStars}}
-                    <svg width="32" height="32">
-                        <use xlink:href="#star-{{.}}"></use>
-                    </svg>
-                    {{/ratingStars}}
-                    <span class="rating-count">{{rating}} of {{numberOfRatings}} ratings</span>
-                </div>
-            </div>
-            <div class="product-price">
-                <span class="fs-2">{{discountPrice}} &euro;</span>
-                <del>{{actualPrice}} &euro; before</del>
-            </div>
-            <p>{{{name}}}</p>
-
-            <div class="product-action mt-4">
-                    <div class="d-flex flex-wrap gap-3 text-uppercase">
-                        <a href="cart/add/{{id}}" role="button" class="btn btn-primary">Add to cart</a>
-                        <a href="/shop.html" role="button" class="btn btn-outline-secondary">Continue Shopping</a>
+            <div class="col-md-5">
+                <div class="product-info">
+                    <div class="element-header">
+                        <h2 itemprop="name" class="display-4">{{{product.shortName}}}</h2>
+                        <div class="rating-container d-flex align-items-center">
+                            {{#product.ratingStars}}
+                            <svg width="32" height="32">
+                                <use xlink:href="#star-{{.}}"></use>
+                            </svg>
+                            {{/product.ratingStars}}
+                            <span class="rating-count">{{product.rating}} of {{product.numberOfRatings}} ratings</span>
+                        </div>
                     </div>
-                </div>
+                    <div class="product-price">
+                        <span class="fs-2">{{product.discountPrice}}&euro;</span></br>
+                        <del>{{product.actualPrice}}&euro; before</del>
+                    </div>
+                    <p>{{product.name}}</p>
+                    <div class="product-action mt-4">
+                        <div class="d-flex flex-wrap gap-3 text-uppercase">
+                            <a href="/cart/add/{{product.id}}" role="button"
+                               class="btn btn-primary">Add to cart</a>
+                            <a href="/shop.html" role="button"
+                               class="btn btn-outline-secondary">Continue Shopping</a>
+
+                        </div>
+                    </div>
                     <div class="cate-links d-flex flex-column mt-4">
                         <div class="cate-tag d-flex mb-3">
                             <div>Category:</div>
@@ -112,8 +100,10 @@
             </div>
         </div>
     </div>
+    </div>
+    </div>
 </section>
-{{/product}}
+
 <section class="product-tabs mt-5">
     <div class="container">
         <div class="row">

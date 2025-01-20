@@ -44,28 +44,33 @@ class ProductServiceTest {
     }
 
     @Test
-    void readPrdoucts_wrong_filename(){
+    void readProducts_wrong_filename() {
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> productService.readProducts("xxx"));
+
+        String expectedMessage = "xxx";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void getProductRange_0_to_PAGE_SIZE() {
 
     }
 
     @Test
-    void getProductRange_0_to_PAGE_SIZE(){
-
+    void getProductRange_16_to_PAGE_SIZE_x_2() {
     }
 
     @Test
-    void getProductRange_16_to_PAGE_SIZE_x_2(){
-
+    void getProductRange_negative_from() {
     }
 
     @Test
-    void getProductRange_negative_from(){
-
+    void getProductRange_to_greater_than_size() {
     }
 
     @Test
-    void getProductRange_to_greater_then_size(){
-
+    void getProductsRange() {
     }
-
 }
