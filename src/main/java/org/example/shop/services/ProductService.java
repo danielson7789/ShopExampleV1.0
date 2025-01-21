@@ -89,8 +89,9 @@ public class ProductService {
 
     public List<Product> getProductsRange(int from, int to) {
         if (from >= 0 && to >= 0) {
-            if  (to < products.size()) {
+            if (to < products.size()) {
                 return products.subList(from, to);
+
             } else if (to < products.size() + PAGE_SIZE + 1) {
                 return products.subList(from, products.size());
             }
@@ -98,5 +99,40 @@ public class ProductService {
         return null;
     }
 
+    public List<Product> getProductsRange(Sorting sorting, int from, int to) {
+        sortArticles(sorting);
+        return getProductsRange(from, to);
+    }
+
+    public int getNumberOfProducts() {
+        return products.size();
+    }
+
+    public void sortArticles(Sorting sorting) {
+        if (sorting != null) {
+            switch (sorting) {
+                case PRICE_ASC:
+                    products.sort((a, b) -> (int) (a.getActualPrice() * 100 - b.getActualPrice() * 100));
+                    break;
+                case PRICE_DESC:
+                    products.sort((a, b) -> (int) (b.getActualPrice() * 100 - a.getActualPrice() * 100));
+                    break;
+                case RATING_ASC:
+                    products.sort((a, b) -> (int) (a.getRating() * 100 - b.getRating() * 100));
+                    break;
+                case RATING_DESC:
+                    products.sort((a, b) -> (int) (b.getRating() * 100 - a.getRating() * 100));
+                    break;
+                case NAME_DESC:
+                    products.sort((a, b) -> b.getName().compareToIgnoreCase(a.getName()));
+                    break;
+                case NAME_ASC:
+                    products.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
 }

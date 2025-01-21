@@ -1,11 +1,12 @@
 package org.example.shop.controllers;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.example.shop.model.Cart;
 import org.example.shop.model.Product;
 import org.example.shop.services.CartService;
 import org.example.shop.services.ProductService;
+import org.example.shop.services.Sorting;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,17 +16,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
-public class ShopController {
+public class ShopController implements ErrorController {
+    private final static Logger LOG = LogManager.getLogger(CartController.class);
     @Autowired
     ProductService productService;
     @Autowired
     private CartService cartService;
-
-    private final static Logger LOG = LogManager.getLogger(CartController.class);
-    protected static final String MESSAGE = "message";
 
 
     @GetMapping(value = {"/"})
@@ -37,25 +38,35 @@ public class ShopController {
     public String homepage(Model viewModel) {
         List<Product> products = productService.getProducts();
         loadCartItems(viewModel);
-        viewModel.addAttribute("products", products.subList(0,8));
+        viewModel.addAttribute("products", products.subList(0, 8));
         return "index";
     }
 
     @GetMapping(value = {"/shop.html"})
-    public String shop(Model viewModel, @RequestParam(name = "page", required = false) Integer page) {
-        int from = (page == null ? 0 : page * productService.PAGE_SIZE);
-        int to = (page == null) ? ProductService.PAGE_SIZE : (page * productService.PAGE_SIZE) + productService.PAGE_SIZE;
-        List<Product> products = productService.getProducts();
-        loadCartItems(viewModel);
-        viewModel.addAttribute("products", productService.getProductsRange(from, to));
+    public String shop(Model viewModel, @RequestParam(name = "page", required = false) Integer page,
+                       @RequestParam(name = "sort", required = false) Sorting sort) {
+
+        // validierung der Seitenzahl
+        int maxPages = productService.getNumberOfProducts() / productService.PAGE_SIZE + 1;
+        page = page == null ? 1 : (page < maxPages ? page : maxPages);
+        page = page < 1 ? 1 : page;
+
+        // zu zeigende Produktrange ermitteln
+        int from = Math.max((page - 1) * productService.PAGE_SIZE, 0);
+        int to = Math.min(productService.getNumberOfProducts(), from + productService.PAGE_SIZE);
+
+        LOG.info("showing page " + page + " of " + maxPages + " pages");
+        LOG.info("getting Items from " + from + " to " + to);
+        LOG.info("sorting " + ((sort == null) ? "default" : sort ) );
+        viewModel.addAttribute("products", productService.getProductsRange(sort ,from, to));
         viewModel.addAttribute("from", from);
         viewModel.addAttribute("to", to);
-        viewModel.addAttribute("numberOfProducts", products.size());
-        viewModel.addAttribute("page", (page==null) ? 1 : page);
-        viewModel.addAttribute("numberOfPages", products.size()/productService.PAGE_SIZE + 1);
+        viewModel.addAttribute("numberOfProducts", productService.getNumberOfProducts());
+        buildPageNumbers(viewModel, page);
+        loadCartItems(viewModel);
+
         return "shop";
     }
-
 
     @GetMapping(value = {"/{name}.html"})
     public String htmlMapping(@PathVariable String name, Model viewModel) {
@@ -63,32 +74,24 @@ public class ShopController {
         return name;
     }
 
-
-    // Example URL: http://localhost:8080/single-page.html?id=1
     @GetMapping(value = {"/single-product.html"})
-    public String detailsPage(Model viewModel,
-                              @RequestParam(name = "productId") Integer productId,
-                              RedirectAttributes atts) {
-        // TODO: 1. get the product with {id} from the ProductService
+    public String singleProduct(Model model, @RequestParam(name = "productId") Integer productId, RedirectAttributes redirectAttributes) {
         Product product = productService.getProductById(productId);
-
-        if (product != null) {
-            // TODO: 2. if it exists, add it to the viewModel as 'product'
-            viewModel.addAttribute("product", product);
-            LOG.info("Showing details of '{}'", product.getShortName());
+        if (product == null) {
+            redirectAttributes.addFlashAttribute("message", "Product not found");
+            LOG.warn("Product not found with id {}", productId);
+            return "redirect:/index.html";
         } else {
-            // TODO: 3. if it doesn't, show an error message using 'atts.addFlashAttribute()'
-            String message = String.format("Product with ID '%s' not found", productId);
-            atts.addFlashAttribute(MESSAGE, message);
-            LOG.warn(message);
+            model.addAttribute("product", product);
+            LOG.info("Product with id {} found", productId);
         }
-        loadCartItems(viewModel);
+        loadCartItems(model);
         return "single-product";
     }
 
-
     /**
      * Loads the cart items from the cart object and stores the corresponding attributes in the viewModel viewModel.
+     *
      * @param viewModel {@link Model}
      */
 
@@ -98,4 +101,18 @@ public class ShopController {
         viewModel.addAttribute("numOfCartItems", cart.getNumberOfItems());
         viewModel.addAttribute("grandTotal", cart.getGrandTotal());
     }
+
+    void buildPageNumbers(Model viewModel, int page) {
+        int pageCount = (productService.getProducts().size() / productService.PAGE_SIZE)+ 1;
+        Map<Integer, String> pages = new HashMap<>();
+        for (int pageNumber = 1; pageNumber <= pageCount; pageNumber++) {
+            String active = (pageNumber == page) ? "active" : "";
+            pages.put(pageNumber, active);
+        }
+        viewModel.addAttribute("pages", pages.entrySet());
+        viewModel.addAttribute("pageCount", pageCount);
+        viewModel.addAttribute("prevPage", (page == 1)? page : page - 1);
+        viewModel.addAttribute("nextPage", (page == pageCount) ? page :page + 1);
+    }
 }
+
