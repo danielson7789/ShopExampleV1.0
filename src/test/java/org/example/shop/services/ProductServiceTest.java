@@ -2,10 +2,9 @@ package org.example.shop.services;
 
 import org.example.shop.model.Product;
 import org.junit.jupiter.api.Test;
-import org.example.shop.services.Sorting;
+import org.example.shop.enums.Sorting;
 import java.util.List;
 
-import static org.example.shop.services.Sorting.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductServiceTest {

@@ -4,6 +4,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.shop.enums.Sorting;
 import org.example.shop.model.Product;
 import org.springframework.stereotype.Service;
 

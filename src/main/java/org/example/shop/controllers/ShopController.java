@@ -4,7 +4,7 @@ import org.example.shop.model.Cart;
 import org.example.shop.model.Product;
 import org.example.shop.services.CartService;
 import org.example.shop.services.ProductService;
-import org.example.shop.services.Sorting;
+import org.example.shop.enums.Sorting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,12 +49,15 @@ public class ShopController implements ErrorController {
 
         // validierung der Seitenzahl
         int maxPages = productService.getNumberOfProducts() / productService.PAGE_SIZE + 1;
-        page = page == null ? 1 : (page < maxPages ? page : maxPages);
+        page = page != null ?  (page < maxPages ? page : maxPages) : 1 ;
         page = page < 1 ? 1 : page;
 
         // zu zeigende Produktrange ermitteln
         int from = Math.max((page - 1) * productService.PAGE_SIZE, 0);
         int to = Math.min(productService.getNumberOfProducts(), from + productService.PAGE_SIZE);
+
+        // handles empty sort parameter
+        sort = (sort != null) ? sort : Sorting.NAME_ASC;
 
         LOG.info("showing page " + page + " of " + maxPages + " pages");
         LOG.info("getting Items from " + from + " to " + to);
@@ -62,8 +66,9 @@ public class ShopController implements ErrorController {
         viewModel.addAttribute("from", from);
         viewModel.addAttribute("to", to);
         viewModel.addAttribute("numberOfProducts", productService.getNumberOfProducts());
-        buildPageNumbers(viewModel, page);
         loadCartItems(viewModel);
+        buildPageNumbers(viewModel, page);
+        createSortingLinks(viewModel, sort);
 
         return "shop";
     }
@@ -113,6 +118,17 @@ public class ShopController implements ErrorController {
         viewModel.addAttribute("pageCount", pageCount);
         viewModel.addAttribute("prevPage", (page == 1)? page : page - 1);
         viewModel.addAttribute("nextPage", (page == pageCount) ? page :page + 1);
+    }
+
+    void createSortingLinks(Model viewModel, Sorting currentSort) {
+        List<Sorting> sortings = new ArrayList<>();
+        for (Sorting entry : Sorting.values()) {
+            String isCurrentSort = entry.equals(currentSort) ? "selected" : "";
+            entry.setSelected(isCurrentSort);
+            sortings.add(entry);
+        }
+        viewModel.addAttribute("sortings", sortings);
+        viewModel.addAttribute("currentSort", currentSort);
     }
 }
 
