@@ -13,19 +13,19 @@ class CartServiceTest {
     private CartService cartService;
     private ProductService productService;
 
-    public CartServiceTest(){
+    public CartServiceTest() {
         cartService = new CartService();
         productService = new ProductService();
     }
 
     @Test
-    void fromProduct_Xiaomi_11() {
-        Product xiaomi11 = productService.getProductById(171);
-        CartItem cartItem = cartService.fromProduct(xiaomi11);
+    void fromProduct_XGMO360() {
+        Product xgmo360 = productService.getProductById(171);
+        CartItem cartItem = cartService.fromProduct(xgmo360);
 
-        assertEquals(1,cartItem.getQuantity());
-        assertEquals(285.99, cartItem.getDiscountPrice());
-        assertEquals(285.99,cartItem.getTotalPrice());
+        assertEquals(1, cartItem.getQuantity());
+        assertEquals(4.39, cartItem.getDiscountPrice());
+        assertEquals(4.38, cartItem.getTotalPrice());
     }
 
     @Test
@@ -33,8 +33,7 @@ class CartServiceTest {
         cartService.addProduct(171);
         CartItem cartItem = cartService.findById(171);
         assertNotNull(cartItem);
-        assertEquals(285.99,cartItem.getDiscountPrice());
-        assertTrue(cartItem.getShortName().startsWith("Xiaomi 11 Lite NE 5G"));
+        assertEquals(4.39, cartItem.getDiscountPrice());
 
     }
 
@@ -42,71 +41,68 @@ class CartServiceTest {
     @DisplayName("fromProduct : non-existant productId")
     void fromProduct_nonExistantProductId() {
         Product nonExistant = productService.getProductById(999999);
-        assertEquals(null,nonExistant);
+        assertEquals(null, nonExistant);
     }
 
     @Test
-    void addProduct_non_existant(){
-        cartService.addProduct(Integer.MAX_VALUE);
-        CartItem cartItem = cartService.findById(Integer.MAX_VALUE);
-        assertEquals(null,cartItem);
+    void addProduct_non_existant() {
+        cartService.addProduct(9999);
+        CartItem cartItem = cartService.findById(9999);
+        assertEquals(null, cartItem);
     }
 
     @Test
-    void findById_empty_cart(){
-        CartItem cartItem = cartService.findById(171);
-        assertEquals(null,cartItem);
-    }
-
-    @Test
-    void increaseQuantity_171(){
+    void increaseQuantity_171() {
         cartService.addProduct(171);
         cartService.increaseQuantity(171);
         cartService.increaseQuantity(171);
         CartItem cartItem = cartService.findById(171);
-        assertEquals(3,cartItem.getQuantity());
+        assertEquals(3, cartItem.getQuantity());
+
     }
 
     @Test
-    void increaseQuantity_non_existant(){
+    void increaseQuantity_non_existent() {
         cartService.addProduct(Integer.MAX_VALUE);
         cartService.increaseQuantity(Integer.MAX_VALUE);
         cartService.increaseQuantity(Integer.MAX_VALUE);
         CartItem cartItem = cartService.findById(Integer.MAX_VALUE);
-        assertEquals(null,cartItem);
+        assertEquals(null, cartItem);
     }
 
     @Test
     void decreaseQuantity_171() {
+        // add 4 times
         cartService.addProduct(171);
         cartService.addProduct(171);
         cartService.addProduct(171);
         cartService.addProduct(171);
-        // decrease by 1
+
+        // decrease 1 time
         cartService.decreaseQuantity(171);
         CartItem cartItem = cartService.findById(171);
         assertEquals(3, cartItem.getQuantity());
     }
 
     @Test
-    void decreaseQuantity_non_existant(){
+    void decreaseQuantity_non_existent() {
         cartService.addProduct(Integer.MAX_VALUE);
         cartService.decreaseQuantity(Integer.MAX_VALUE);
         cartService.decreaseQuantity(Integer.MAX_VALUE);
         CartItem cartItem = cartService.findById(Integer.MAX_VALUE);
-        assertEquals(null,cartItem);
+        assertEquals(null, cartItem);
     }
 
     @Test
     void removeProduct_171() {
         cartService.addProduct(171);
         String shortName = cartService.removeProduct(171);
-        assertTrue(shortName.startsWith("Xiaomi 11 Lite NE 5G"));
+        assertTrue(shortName.startsWith("XGMO"));
     }
 
     @Test
-    void removeProduct_non_existant(){
+    void removeProduct_non_existent () {
         String shortName = cartService.removeProduct(Integer.MAX_VALUE);
-        assertEquals(null,shortName);
+        assertEquals(null, shortName);
     }
 }

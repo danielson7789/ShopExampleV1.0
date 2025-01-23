@@ -1,8 +1,11 @@
 package org.example.shop.services;
 
+import org.example.shop.Constants;
+import org.example.shop.enums.Sorting;
 import org.example.shop.model.Product;
 import org.junit.jupiter.api.Test;
-import org.example.shop.enums.Sorting;
+import org.mockito.internal.matchers.Or;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductServiceTest {
     private ProductService productService;
 
-    public ProductServiceTest(){
+    public ProductServiceTest() {
         productService = new ProductService();
     }
 
@@ -24,9 +27,9 @@ class ProductServiceTest {
 
     @Test
     void getProductById_171() {
-        Product xiaomi11 = productService.getProductById(171);
-        assertNotNull(xiaomi11);
-        assertTrue(xiaomi11.getName().startsWith("Xiaomi 11 Lite"));
+        Product xgmo = productService.getProductById(171);
+        assertNotNull(xgmo);
+        assertTrue(xgmo.getName().startsWith("XGMO"));
     }
 
     void getProductById_boundary() {
@@ -43,36 +46,42 @@ class ProductServiceTest {
 
     @Test
     void getProductRange_0_to_PAGE_SIZE() {
-        List<Product> expectet =  productService.getProducts().subList(0, productService.PAGE_SIZE);
+        List<Product> expectet =  productService.getProducts().subList(0, Constants.PAGE_SIZE);
 
-        assertEquals(expectet, productService.getProductsRange(0, productService.PAGE_SIZE));
+        assertEquals(expectet, productService.getRange(0, Constants.PAGE_SIZE));
 
     }
 
     @Test
     void getProductRange_16_to_PAGE_SIZE_x_2() {
-        List<Product> expectet =  productService.getProducts().subList(16, productService.PAGE_SIZE * 2);
+        List<Product> expectet =  productService.getProducts().subList(16, Constants.PAGE_SIZE * 2);
 
-        assertEquals(expectet, productService.getProductsRange(16, productService.PAGE_SIZE * 2));
+        assertEquals(expectet, productService.getRange(16, Constants.PAGE_SIZE * 2));
     }
 
     @Test
-    void getProductRange_negative_from() {
-        assertEquals(null, productService.getProductsRange(-1, productService.PAGE_SIZE));
+    void getRange_negative_from() {
+        List<Product> products = productService.getRange(-Constants.PAGE_SIZE, Constants.PAGE_SIZE);
+        assertNotNull(products);
+        assertEquals(Constants.PAGE_SIZE, products.size());
+
     }
 
-
     @Test
-    void getProductRange_to_greater_than_size() {
-        assertEquals(null,
-                productService.getProductsRange(15, productService.getProducts().size()
-                        + productService.PAGE_SIZE + 1));
+    void getRange_to_greater_than_size() {
+        int nrProducts = productService.getNumberOfProducts();
+        int from = nrProducts - Constants.PAGE_SIZE;
+        int to = nrProducts + Constants.PAGE_SIZE;
+        List<Product> products = productService.getRange(from, to);
+
+        assertNotNull(products);
+        assertEquals(Constants.PAGE_SIZE, products.size());
     }
 
     @Test
     void sortArticles_name_desc() {
         List<Product> products = productService.getProducts();
-        productService.sortArticles(Sorting.NAME_DESC);
+        productService.sortProducts(Sorting.NAME_DESC);
 
         Product firstProduct = products.get(0);
         assertTrue(firstProduct.getName().startsWith("Xifo LYF Earth"));
@@ -81,7 +90,7 @@ class ProductServiceTest {
     @Test
     void sortArticels_name_asc() {
         List<Product> products = productService.getProducts();
-        productService.sortArticles(Sorting.NAME_ASC);
+        productService.sortProducts(Sorting.NAME_ASC);
 
         Product firstProduct = products.get(0);
         assertTrue(firstProduct.getName().startsWith("2.5mm Male"));
@@ -90,7 +99,7 @@ class ProductServiceTest {
     @Test
     void sortArticels_price_desc() {
         List<Product> products = productService.getProducts();
-        productService.sortArticles(Sorting.PRICE_DESC);
+        productService.sortProducts(Sorting.PRICE_DESC);
 
         Product firstProduct = products.get(0);
         assertTrue(firstProduct.getName().startsWith("Xiaomi 11 Lite"));
@@ -99,16 +108,16 @@ class ProductServiceTest {
     @Test
     void sortArticels_price_asc() {
         List<Product> products = productService.getProducts();
-        productService.sortArticles(Sorting.PRICE_ASC);
+        productService.sortProducts(Sorting.PRICE_ASC);
 
         Product firstProduct = products.get(0);
-        assertTrue(firstProduct.getName().startsWith("Amazon Basics USB"));
+        assertTrue(firstProduct.getName().startsWith("Amazon Brand"));
     }
 
     @Test
     void sortArticles_rating_desc() {
         List<Product> products = productService.getProducts();
-        productService.sortArticles(Sorting.RATING_DESC);
+        productService.sortProducts(Sorting.RATING_DESC);
 
         Product firstProduct = products.get(0);
         assertTrue(firstProduct.getName().startsWith("CLAVIER Pulse in-Ear"));
@@ -117,7 +126,7 @@ class ProductServiceTest {
     @Test
     void sortArticles_rating_asc() {
         List<Product> products = productService.getProducts();
-        productService.sortArticles(Sorting.RATING_ASC);
+        productService.sortProducts(Sorting.RATING_ASC);
 
         Product firstProduct = products.get(0);
         assertTrue(firstProduct.getName().startsWith("Screen Magnifier for"));
@@ -126,7 +135,7 @@ class ProductServiceTest {
     @Test
     void sortArticles_default() {
         List<Product> products = productService.getProducts();
-        productService.sortArticles(null);
+        productService.sortProducts(null);
 
         Product firstProduct = products.get(0);
         assertTrue(firstProduct.getName().startsWith("2.5mm Male"));

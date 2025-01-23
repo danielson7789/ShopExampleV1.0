@@ -1,5 +1,4 @@
 package org.example.shop.model;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -7,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 @Component
 @SessionScope
+
 /** Represents a shopping cart ... */
+
 public class Cart {
     List<CartItem> items;
     int totalNumberOfItems;
@@ -38,4 +39,3 @@ public class Cart {
         return Math.floor(total * 100) / 100;
     }
 }
-

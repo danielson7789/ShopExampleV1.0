@@ -1,5 +1,14 @@
 package org.example.shop.enums;
 
+
+/**
+ * Represents a payment method
+ *
+ * @author Daniel Klenn
+ * @version 1.7
+ * @since 1.7
+ */
+
 public enum PaymentMethod {
     CREDITCARD   ("Credit card"),
     PAYPAL       ("Paypal"),

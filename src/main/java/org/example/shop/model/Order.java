@@ -3,7 +3,13 @@ package org.example.shop.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
+/**
+ * This class represents a Order
+ *
+ * @author Daniel Klenn
+ * @version 1.7
+ * @since 1.0
+ */
 public class Order {
     private static int orderCounter = 1;
     private int id;
@@ -17,15 +23,33 @@ public class Order {
     private double includedTax;
     private double grandTotal;
 
-    // Constructor with id, items, orderDate, billing
-    public Order(List<CartItem> items, LocalDateTime orderDate, Billing billing) {
+    public Order( List<CartItem> items, LocalDateTime orderDate, Billing billing) {
         this.id = orderCounter++;
         this.items = items;
         this.orderDate = orderDate;
         this.billing = billing;
     }
 
-    // Getters for all fields
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public void setShipping(double shipping) {
+        this.shipping = shipping;
+    }
+
+    public void setIncludedTax(double includedTax) {
+        this.includedTax = includedTax;
+    }
+
+    public void setGrandTotal(double grandTotal) {
+        this.grandTotal = grandTotal;
+    }
+
     public int getId() {
         return id;
     }
@@ -65,30 +89,4 @@ public class Order {
     public double getGrandTotal() {
         return grandTotal;
     }
-
-    // Setters for "double" type fields
-    public void setSubTotal(double subTotal) {
-        this.subTotal = subTotal;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
-
-    public void setShipping(double shipping) {
-        this.shipping = shipping;
-    }
-
-    public void setIncludedTax(double includedTax) {
-        this.includedTax = includedTax;
-    }
-
-    public void setGrandTotal(double grandTotal) {
-        this.grandTotal = grandTotal;
-    }
 }
-
-
-// TODO: create constructor with id, items, orderDate, billing
-    // TODO: create Getters for all fields
-    // TODO create Setters for "double" type fields

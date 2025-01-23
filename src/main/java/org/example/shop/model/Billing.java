@@ -1,5 +1,8 @@
 package org.example.shop.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.example.shop.enums.PaymentMethod;
 
 
@@ -59,4 +62,3 @@ public class Billing {
         return paymentMethod;
     }
 }
-

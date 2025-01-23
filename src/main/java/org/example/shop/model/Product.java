@@ -1,20 +1,28 @@
 package org.example.shop.model;
 
-/*
-* This class represents a product
-* @author Daniel Klenn
-* @version 1.0
-* @since 1.0
+import org.example.shop.enums.Category;
+
+/**
+ * This class represents a product
+ *
+ * @author Daniel Klenn
+ * @version 1.7
+ * @since 1.0
  */
 
 public class Product {
+    public static final int SHORTNAME_LENGTH = 33;
+    // will be generated automatically
     protected long id;
     protected String name;
+    Category category;
     protected String image;
     protected double rating;
     protected int numberOfRatings;
     protected double actualPrice;
     protected double discountPrice;
+
+    public Product() {}
 
     public Product(long id, String name, String image, double rating, int numberOfRatings, double actualPrice, double discountPrice) {
         this.id = id;
@@ -26,8 +34,9 @@ public class Product {
         this.discountPrice = discountPrice;
     }
 
-    public Product() {
-
+    public Product(long id, String name, Category category, String image, double rating, int numberOfRatings, double actualPrice, double discountPrice) {
+        this(id, name, image, rating, numberOfRatings, actualPrice, discountPrice);
+        this.category = category;
     }
 
     public long getId() {
@@ -38,12 +47,31 @@ public class Product {
         return name;
     }
 
+    public String getShortName() {
+        int end = name.indexOf(' ', SHORTNAME_LENGTH);
+        return name.substring(0, end) + "...";
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
     public String getImage() {
         return image;
     }
 
     public double getRating() {
         return rating;
+    }
+
+    public String[] getRatingStars() {
+        String[] stars = new String[5];
+        // fills x stars with "solid" until the rating is reached
+        for (int i = 1; i <= 5; i++) {
+            String starType = (i <= rating) ? "solid" : "outline";
+            stars[i - 1] = starType;
+        }
+        return stars;
     }
 
     public int getNumberOfRatings() {
@@ -61,8 +89,13 @@ public class Product {
     public void setId(long id) {
         this.id = id;
     }
+
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public void setImage(String image) {
@@ -83,21 +116,5 @@ public class Product {
 
     public void setDiscountPrice(double discountPrice) {
         this.discountPrice = discountPrice;
-    }
-
-    public static final int SHORTNAME_LENGTH = 33;
-
-    public String getShortName() {
-        int end = name.indexOf(' ', SHORTNAME_LENGTH);
-        return name.substring(0, end) + "...";
-    }
-
-    public String[] getRatingStars(){
-        String[] stars = new String[5];
-        for (int i = 1; i <= 5; i++) {
-            String starType = (rating <= i) ? "outline" : "solid" ;
-            stars[i-1] = starType;
-        }
-        return stars;
     }
 }
