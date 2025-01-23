@@ -18,7 +18,7 @@ public class Order {
     private double grandTotal;
 
     // Constructor with id, items, orderDate, billing
-    public Order(int id, List<CartItem> items, LocalDateTime orderDate, Billing billing) {
+    public Order(List<CartItem> items, LocalDateTime orderDate, Billing billing) {
         this.id = orderCounter++;
         this.items = items;
         this.orderDate = orderDate;
