@@ -1,8 +1,12 @@
 package org.example.shop.model;
 
+import org.example.shop.Constants;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
+
 /**
  * This class represents a Order
  *
@@ -28,6 +32,10 @@ public class Order {
         this.items = items;
         this.orderDate = orderDate;
         this.billing = billing;
+    }
+
+    public Order(List<CartItem> items){
+        this.items = items;
     }
 
     public void setSubTotal(double subTotal) {
@@ -70,23 +78,36 @@ public class Order {
         return billing;
     }
 
-    public double getSubTotal() {
-        return subTotal;
+    public String getSubTotal() {
+        double totals = 0;
+        for (CartItem item : items) {
+            totals += item.getTotalPrice();
+        }
+        subTotal = totals;
+        return trimDecimals(subTotal);
     }
 
-    public double getDiscount() {
-        return discount;
+    public String getShipping() {
+        shipping = Constants.SHIPPING_COSTS;
+        return trimDecimals(shipping);
     }
 
-    public double getShipping() {
-        return shipping;
+    public String getIncludedTax() {
+        includedTax = subTotal * Constants.VAT_FACTOR;
+        return trimDecimals(includedTax);
     }
 
-    public double getIncludedTax() {
-        return includedTax;
+    public String getGrandTotal() {
+        grandTotal = subTotal + shipping + includedTax - discount;
+        return trimDecimals(grandTotal);
     }
 
-    public double getGrandTotal() {
-        return grandTotal;
+    public String getDiscount() {
+        discount = Constants.DISCOUNT_FACTOR * subTotal;
+        return trimDecimals(discount);
+    }
+
+    private String trimDecimals(double number){
+        return String.format(Locale.US,"%.2f", number);
     }
 }
